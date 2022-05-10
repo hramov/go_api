@@ -4,21 +4,19 @@ import (
 	"api/src/modules/auth/jwt"
 	"api/src/modules/logger"
 	"api/src/modules/user"
-	user_entity "api/src/modules/user/entity"
 	"api/src/utils"
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golobby/container/v3"
-	"gorm.io/gorm"
 )
 
 func JwtAuthGuard(c *gin.Context, roles []string) {
 
-	var db *gorm.DB
-	if err := container.NamedResolve(&db, "postgres"); err != nil {
-		logger.Error("Cannot resolve db")
+	var userService *user.UserService
+	if err := container.NamedResolve(&userService, "UserService"); err != nil {
+		logger.Error("Cannot resolve UserService")
 	}
 
 	req, _ := utils.GetReqResFromContext(c)
@@ -41,12 +39,6 @@ func JwtAuthGuard(c *gin.Context, roles []string) {
 	}
 
 	id := data["jti"].(string)
-
-	userService := &user.UserService{
-		Repo: &user_entity.UserRepository{
-			Db: db,
-		},
-	}
 
 	user := userService.FindBy("id", id)
 

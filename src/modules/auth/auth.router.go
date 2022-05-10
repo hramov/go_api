@@ -2,28 +2,13 @@ package auth
 
 import (
 	"api/src/modules/auth/guards"
-	"api/src/modules/logger"
-	user_entity "api/src/modules/user/entity"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golobby/container/v3"
-	"gorm.io/gorm"
 )
 
 func Init(router *gin.RouterGroup) {
 
-	var db *gorm.DB
-	if err := container.NamedResolve(&db, "postgres"); err != nil {
-		logger.Error("Cannot resolve db")
-	}
-
-	controller := &AuthController{
-		service: &AuthService{
-			repo: &user_entity.UserRepository{
-				Db: db,
-			},
-		},
-	}
+	controller := &AuthController{}
 
 	auth := router.Group("/auth")
 	{

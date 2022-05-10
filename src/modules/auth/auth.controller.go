@@ -2,16 +2,16 @@ package auth
 
 import (
 	auth_dto "api/src/modules/auth/dto"
+	"api/src/modules/logger"
 	user_entity "api/src/modules/user/entity"
 	"api/src/utils"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/golobby/container/v3"
 )
 
-type AuthController struct {
-	service *AuthService
-}
+type AuthController struct{}
 
 func (ac *AuthController) Ping(c *gin.Context) {
 	c.JSON(http.StatusOK, &gin.H{
@@ -20,6 +20,11 @@ func (ac *AuthController) Ping(c *gin.Context) {
 }
 
 func (ac *AuthController) Login(c *gin.Context) {
+
+	var authService *AuthService
+	if err := container.NamedResolve(&authService, "AuthService"); err != nil {
+		logger.Error("Cannot resolve AuthService")
+	}
 
 	dto, err := utils.GetBody[auth_dto.LoginDto](c)
 
@@ -30,7 +35,7 @@ func (ac *AuthController) Login(c *gin.Context) {
 		return
 	}
 
-	token, err := ac.service.Login(dto)
+	token, err := authService.Login(dto)
 
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{

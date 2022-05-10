@@ -3,19 +3,24 @@ package auth
 import (
 	auth_dto "api/src/modules/auth/dto"
 	"api/src/modules/auth/jwt"
-	user_port "api/src/modules/user/port"
+	"api/src/modules/logger"
+	"api/src/modules/user"
 	"fmt"
 
+	"github.com/golobby/container/v3"
 	"golang.org/x/crypto/bcrypt"
 )
 
-type AuthService struct {
-	repo user_port.UserRepoPort
-}
+type AuthService struct{}
 
 func (as *AuthService) Login(dto auth_dto.LoginDto) (string, error) {
 
-	user := as.repo.FindByEmail(dto.Email)
+	var userService *user.UserService
+	if err := container.NamedResolve(&userService, "UserService"); err != nil {
+		logger.Error("Cannot resolve User service")
+	}
+
+	user := userService.FindByEmail(dto.Email)
 	if user == nil {
 		return "", fmt.Errorf("Cannot find user")
 	}

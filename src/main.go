@@ -2,6 +2,7 @@ package main
 
 import (
 	"api/src/api/v1"
+	ioc "api/src/container"
 	"api/src/database"
 	"api/src/modules/logger"
 
@@ -17,7 +18,10 @@ func main() {
 	}
 
 	database.InitPostgres()
-	// Request handlers
+
+	ioc.Init()
+	logger.Info("IoC started")
+
 	api := api.Server{}
 	go api.Start()
 
