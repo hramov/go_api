@@ -1,8 +1,8 @@
 package guards
 
 import (
-	"api/src/modules/auth/jwt"
-	"api/src/modules/logger"
+	"api/src/core/jwt"
+	"api/src/core/logger"
 	"api/src/modules/user"
 	"api/src/utils"
 	"fmt"

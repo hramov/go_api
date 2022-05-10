@@ -1,8 +1,8 @@
 package ioc
 
 import (
+	"api/src/core/logger"
 	"api/src/modules/auth"
-	"api/src/modules/logger"
 	"api/src/modules/user"
 	user_entity "api/src/modules/user/entity"
 

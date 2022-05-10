@@ -2,9 +2,9 @@ package main
 
 import (
 	"api/src/api/v1"
-	ioc "api/src/container"
+	ioc "api/src/core/container"
+	"api/src/core/logger"
 	"api/src/database"
-	"api/src/modules/logger"
 
 	"github.com/joho/godotenv"
 )

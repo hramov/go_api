@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"api/src/modules/auth/guards"
+	"api/src/core/guards"
 
 	"github.com/gin-gonic/gin"
 )

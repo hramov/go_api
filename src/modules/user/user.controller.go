@@ -1,7 +1,7 @@
 package user
 
 import (
-	"api/src/modules/logger"
+	"api/src/core/logger"
 	"net/http"
 
 	"github.com/gin-gonic/gin"

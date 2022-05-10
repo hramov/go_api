@@ -1,8 +1,8 @@
 package api
 
 import (
+	"api/src/core/logger"
 	"api/src/modules/auth"
-	"api/src/modules/logger"
 	"api/src/modules/user"
 
 	"github.com/gin-gonic/gin"

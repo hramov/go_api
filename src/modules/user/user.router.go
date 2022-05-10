@@ -1,7 +1,7 @@
 package user
 
 import (
-	"api/src/modules/logger"
+	"api/src/core/logger"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golobby/container/v3"

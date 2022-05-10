@@ -1,7 +1,7 @@
 package database
 
 import (
-	"api/src/modules/logger"
+	"api/src/core/logger"
 	user_entity "api/src/modules/user/entity"
 	"fmt"
 	"os"
