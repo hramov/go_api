@@ -20,6 +20,5 @@ func (a *Server) Start() {
 	user.Init(api)
 
 	logger.Info("Initialized all router groups")
-
 	router.Run(":3000")
 }
