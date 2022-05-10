@@ -30,6 +30,10 @@ func GetTokenFromRequest(req *http.Request) (string, error) {
 }
 
 func Exists[T comparable](array []T, value T) bool {
+	if len(array) == 0 {
+		return true
+	}
+
 	for _, val := range array {
 		if (val) == value {
 			return true
@@ -50,17 +54,17 @@ func SendError(status int, err error, c *gin.Context) {
 	c.AbortWithStatusJSON(status, err)
 }
 
-func GetBody[T comparable](c *gin.Context) (T, error) {
+func GetBody[T comparable](c *gin.Context) T {
 	var data T
 	jsonData, err := ioutil.ReadAll(c.Request.Body)
 	if err != nil {
-		return data, err
+		return data
 	}
 
 	err = json.Unmarshal(jsonData, &data)
 
 	if err != nil {
-		return data, err
+		return data
 	}
-	return data, nil
+	return data
 }

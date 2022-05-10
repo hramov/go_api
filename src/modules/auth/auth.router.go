@@ -13,7 +13,7 @@ func Init(router *gin.RouterGroup) {
 	auth := router.Group("/auth")
 	{
 		auth.GET("/ping", controller.Ping)
-		auth.GET("/info", func(c *gin.Context) { guards.JwtAuthGuard(c, []string{}) }, controller.UserInfo)
-		auth.POST("/login", controller.Login)
+		auth.GET("/info", guards.JwtAuthGuard([]string{}), controller.UserInfo)
+		auth.POST("/login", guards.LocalGuard, controller.Login)
 	}
 }
