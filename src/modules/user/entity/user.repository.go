@@ -12,9 +12,11 @@ type UserRepository struct {
 }
 
 func CreateRepository() *UserRepository {
-	return &UserRepository{
+	repository := &UserRepository{
 		Db: ioc.Pick[*gorm.DB]("postgres"),
 	}
+	ioc.Put("UserRepository", repository)
+	return repository
 }
 
 func (ur *UserRepository) Find() []*User {

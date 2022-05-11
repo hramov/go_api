@@ -4,7 +4,7 @@ import (
 	ioc "api/src/core/container"
 	"api/src/core/jwt"
 	auth_dto "api/src/modules/auth/dto"
-	"api/src/modules/user"
+	user_entity "api/src/modules/user/entity"
 	"api/src/utils"
 	"fmt"
 	"net/http"
@@ -17,7 +17,7 @@ func LocalGuard(c *gin.Context) {
 
 	body := utils.GetBody[auth_dto.LoginDto](c)
 
-	userService := ioc.Pick[*user.UserService]("UserService")
+	userService := ioc.Pick[*user_entity.UserRepository]("UserRepository")
 
 	user := userService.FindByEmail(body.Email)
 	if user == nil {

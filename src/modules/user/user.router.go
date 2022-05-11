@@ -2,6 +2,7 @@ package user
 
 import (
 	ioc "api/src/core/container"
+	"api/src/core/guards"
 
 	"github.com/gin-gonic/gin"
 )
@@ -12,6 +13,6 @@ func InitRouter() {
 
 	user := router.Group("/user")
 	{
-		user.GET("/", controller.Find)
+		user.GET("/", guards.JwtAuthGuard([]string{"admin"}), controller.Find)
 	}
 }

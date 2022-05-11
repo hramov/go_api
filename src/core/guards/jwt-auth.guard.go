@@ -3,7 +3,7 @@ package guards
 import (
 	ioc "api/src/core/container"
 	"api/src/core/jwt"
-	"api/src/modules/user"
+	user_entity "api/src/modules/user/entity"
 	"api/src/utils"
 	"fmt"
 	"net/http"
@@ -14,7 +14,7 @@ import (
 func JwtAuthGuard(roles []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 
-		userService := ioc.Pick[*user.UserService]("UserService")
+		userService := ioc.Pick[*user_entity.UserRepository]("UserRepository")
 
 		token, err := utils.GetTokenFromContext(c)
 
