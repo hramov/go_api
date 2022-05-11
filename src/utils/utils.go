@@ -105,10 +105,8 @@ type Initable interface {
 }
 
 func InitModules(modules []Initable) {
-
 	for i := 0; i < len(modules); i++ {
 		temp := modules[i]
 		temp.Init()
 	}
-
 }

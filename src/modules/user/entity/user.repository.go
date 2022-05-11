@@ -1,6 +1,7 @@
 package user_entity
 
 import (
+	ioc "api/src/core/container"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -8,6 +9,12 @@ import (
 
 type UserRepository struct {
 	Db *gorm.DB
+}
+
+func CreateRepository() *UserRepository {
+	return &UserRepository{
+		Db: ioc.Pick[*gorm.DB]("postgres"),
+	}
 }
 
 func (ur *UserRepository) Find() []*User {

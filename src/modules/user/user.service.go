@@ -4,8 +4,6 @@ import (
 	ioc "api/src/core/container"
 	user_entity "api/src/modules/user/entity"
 	user_port "api/src/modules/user/port"
-
-	"gorm.io/gorm"
 )
 
 type UserService struct {
@@ -13,11 +11,8 @@ type UserService struct {
 }
 
 func createService() *UserService {
-	db := ioc.Pick[*gorm.DB]("postgres")
 	service := &UserService{
-		&user_entity.UserRepository{
-			Db: db,
-		},
+		Repo: user_entity.CreateRepository(),
 	}
 	ioc.Put("UserService", service)
 	return service
