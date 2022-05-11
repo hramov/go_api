@@ -16,7 +16,7 @@ func main() {
 		logger.Error("Error loading .env file")
 	}
 
-	database.InitPostgres()
+	database.InitPostgres(true)
 
 	ioc.Init()
 	logger.Info("IoC started")

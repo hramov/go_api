@@ -19,8 +19,7 @@ func JwtAuthGuard(roles []string) gin.HandlerFunc {
 			logger.Error("Cannot resolve UserService")
 		}
 
-		req, _ := utils.GetReqResFromContext(c)
-		token, err := utils.GetTokenFromRequest(req)
+		token, err := utils.GetTokenFromContext(c)
 
 		if err != nil {
 			c.AbortWithStatusJSON(http.StatusForbidden, gin.H{

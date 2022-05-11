@@ -13,7 +13,7 @@ type Server struct{}
 func (a *Server) Start() {
 	router := gin.Default()
 	gin.SetMode(gin.ReleaseMode)
-
+	router.Use(gin.Recovery())
 	api := router.Group("/api/v1")
 
 	auth.Init(api)

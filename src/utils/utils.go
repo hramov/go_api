@@ -29,6 +29,11 @@ func GetTokenFromRequest(req *http.Request) (string, error) {
 	return "", fmt.Errorf("No auth header")
 }
 
+func GetTokenFromContext(c *gin.Context) (string, error) {
+	req, _ := GetReqResFromContext(c)
+	return GetTokenFromRequest(req)
+}
+
 func Exists[T comparable](array []T, value T) bool {
 	if len(array) == 0 {
 		return true

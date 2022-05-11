@@ -11,7 +11,7 @@ import (
 	"gorm.io/gorm"
 )
 
-func InitPostgres() {
+func InitPostgres(migrate bool) {
 	PostgresDSN := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s sslmode=disable",
 		os.Getenv("DB_HOST"), os.Getenv("DB_USER"), os.Getenv("DB_PASSWORD"),
 		os.Getenv("DB_NAME"), os.Getenv("DB_PORT"))
@@ -22,15 +22,21 @@ func InitPostgres() {
 	}
 
 	logger.Info("Successfilly connected to database")
-	err = db.AutoMigrate(&user_entity.User{})
-	if err != nil {
-		logger.Error("Cannot migrate User Entity")
+
+	if migrate {
+		migrateModels(db)
 	}
 
 	err = container.NamedSingleton("postgres", func() *gorm.DB {
 		return db
 	})
 	if err != nil {
-		logger.Error("Cannot use IOC")
+		logger.Error("Cannot use IoC")
+	}
+}
+
+func migrateModels(db *gorm.DB) {
+	if err := db.AutoMigrate(&user_entity.User{}); err != nil {
+		logger.Error("Cannot migrate User")
 	}
 }
