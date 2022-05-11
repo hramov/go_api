@@ -22,8 +22,9 @@ func (us *UserService) Find() []*user_entity.User {
 	return us.Repo.Find()
 }
 
-func (us *UserService) FindByEmail(email string) *user_entity.User {
+func (us *UserService) FindByEmail(email string) (*user_entity.User, error) {
 	return us.Repo.FindByEmail(email)
+
 }
 
 func (us *UserService) FindBy(field string, data string) *user_entity.User {

@@ -11,23 +11,32 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"golang.org/x/crypto/bcrypt"
+	"gorm.io/gorm"
 )
 
 func LocalGuard(c *gin.Context) {
 
-	body := utils.GetBody[auth_dto.LoginDto](c)
+	body, err := utils.GetBody[auth_dto.LoginDto](c)
 
-	userService := ioc.Pick[*user_entity.UserRepository]("UserRepository")
-
-	user := userService.FindByEmail(body.Email)
-	if user == nil {
+	if err != nil {
 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
-			"error": fmt.Errorf("Cannot find user"),
+			"error": err.Error(),
 		})
 		return
 	}
 
-	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
+	userService := ioc.Pick[*user_entity.UserRepository]("UserRepository")
+
+	user, err := userService.FindByEmail(body.Email)
+
+	if err == gorm.ErrRecordNotFound {
+		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
+			"error": fmt.Errorf("Cannot find user").Error(),
+		})
+		return
+	}
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
 	if err != nil {
 		c.AbortWithStatusJSON(http.StatusForbidden, gin.H{
 			"error": err.Error(),
@@ -45,5 +54,6 @@ func LocalGuard(c *gin.Context) {
 	}
 
 	c.Set("access_token", token)
+	c.Set("body", body)
 	c.Next()
 }

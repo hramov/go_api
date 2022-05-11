@@ -11,6 +11,23 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
+type Initable interface {
+	Init()
+}
+
+/**
+This function inits all modules.
+Modules provide their services in IoC container.
+Modules can be resolved by inner function Get<ModuleName>Module()
+Modules services can be resolved via ioc.Pick[T](name string) T
+*/
+func InitModules(modules []Initable) {
+	for i := 0; i < len(modules); i++ {
+		temp := modules[i]
+		temp.Init()
+	}
+}
+
 func GetReqResFromContext(c *gin.Context) (*http.Request, *http.Response) {
 	return c.Request, c.Request.Response
 }
@@ -60,19 +77,22 @@ func SendError(status int, err error, c *gin.Context) {
 	c.AbortWithStatusJSON(status, err)
 }
 
-func GetBody[T comparable](c *gin.Context) T {
+func GetBody[T comparable](c *gin.Context) (T, error) {
 	var data T
-	jsonData, err := ioutil.ReadAll(c.Request.Body)
-	if err != nil {
-		return data
+
+	reqBody, exists := c.Get("body")
+
+	if !exists {
+		rawData, err := ioutil.ReadAll(c.Request.Body)
+		if err != nil {
+			return data, err
+		}
+		err = json.Unmarshal(rawData, &data)
+		return data, nil
 	}
 
-	err = json.Unmarshal(jsonData, &data)
-
-	if err != nil {
-		return data
-	}
-	return data
+	data = reqBody.(T)
+	return data, nil
 }
 
 func CheckErrorForHttp(err error, status int, c *gin.Context) {
@@ -91,22 +111,4 @@ func GetPasswordHash(password string) (string, error) {
 		return "", err
 	}
 	return string(hash), nil
-}
-
-/**
-This function inits all modules.
-Modules provide their services in IoC container.
-Modules can be resolved by inner function Get<ModuleName>Module()
-Modules services can be resolved via ioc.Pick[T](name string) T
-*/
-
-type Initable interface {
-	Init()
-}
-
-func InitModules(modules []Initable) {
-	for i := 0; i < len(modules); i++ {
-		temp := modules[i]
-		temp.Init()
-	}
 }

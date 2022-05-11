@@ -2,6 +2,7 @@ package user_entity
 
 import (
 	ioc "api/src/core/container"
+	"errors"
 	"fmt"
 
 	"gorm.io/gorm"
@@ -25,10 +26,13 @@ func (ur *UserRepository) Find() []*User {
 	return users
 }
 
-func (ur *UserRepository) FindByEmail(email string) *User {
+func (ur *UserRepository) FindByEmail(email string) (*User, error) {
 	var user *User
-	ur.Db.Where("email = ?", email).First(&user)
-	return user
+	result := ur.Db.Where("email = ?", email).First(&user)
+	if errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		return nil, gorm.ErrRecordNotFound
+	}
+	return user, nil
 }
 
 func (ur *UserRepository) FindBy(field string, email string) *User {
