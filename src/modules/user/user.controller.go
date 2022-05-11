@@ -2,7 +2,7 @@ package user
 
 import (
 	ioc "api/src/core/container"
-	"net/http"
+	"api/src/utils"
 
 	"github.com/gin-gonic/gin"
 )
@@ -24,7 +24,5 @@ func createController() *UserController {
 
 func (uc *UserController) Find(c *gin.Context) {
 	result := uc.Service.Find()
-	c.JSON(http.StatusOK, gin.H{
-		"result": result,
-	})
+	utils.SendResponse(200, "", result, c)
 }

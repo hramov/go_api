@@ -1,5 +1,26 @@
 package validation
 
+/**
+
+Package Validation
+Fot now defines such validation options as:
+  - required
+  - type="email"
+  - min=<number>
+  - max=<number>
+
+For example to add validation for your DTO you can write tags like this:
+
+type LoginDto struct {
+	Email    string `json:"email" validate:"type=email"`
+	Password string `json:"password" validate:"required"`
+}
+
+All validation parameters must be inside of "validate" property and be divided by a comma
+Only public function is DefaultValidator that contains all logic for work with reflect package and tags
+
+*/
+
 import (
 	"api/src/core/validation/validators"
 	"reflect"
@@ -104,6 +125,11 @@ func validate[T comparable](items PropArray) (bool, []string) {
 		if attrs.Type != "" {
 			if attrs.Type == "email" {
 				if err := validators.IsEmail(items[i].Name, items[i].Value.(reflect.Value)); err != nil {
+					errs = append(errs, err.Error())
+				}
+			}
+			if attrs.Type == "password" {
+				if err := validators.IsRequired(items[i].Name, items[i].Value.(reflect.Value)); err != nil {
 					errs = append(errs, err.Error())
 				}
 			}

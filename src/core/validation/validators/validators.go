@@ -11,6 +11,10 @@ func IsEmail(name string, value reflect.Value) error {
 	return err
 }
 
+func IsString(name string, value reflect.Value) error {
+	return nil
+}
+
 func IsRequired(name string, value reflect.Value) error {
 	if value.String() == "" {
 		return fmt.Errorf("Value " + name + " must not be null")

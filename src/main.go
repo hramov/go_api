@@ -1,5 +1,13 @@
 package main
 
+/**
+
+Name: Golang REST API server (inspired by NestJS)
+Version: 0.0.1
+Author: Khramov Sergey <trykhramov@gmail.com> | github.com/hramov
+
+*/
+
 import (
 	"api/src/api/v1"
 	"api/src/core/logger"

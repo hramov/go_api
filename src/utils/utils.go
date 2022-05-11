@@ -15,12 +15,6 @@ type Initable interface {
 	Init()
 }
 
-/**
-This function inits all modules.
-Modules provide their services in IoC container.
-Modules can be resolved by inner function Get<ModuleName>Module()
-Modules services can be resolved via ioc.Pick[T](name string) T
-*/
 func InitModules(modules []Initable) {
 	for i := 0; i < len(modules); i++ {
 		temp := modules[i]
@@ -65,7 +59,7 @@ func Exists[T comparable](array []T, value T) bool {
 	return false
 }
 
-func SendResponse[T comparable](status int, message string, data T, c *gin.Context) {
+func SendResponse[T any](status int, message string, data T, c *gin.Context) {
 	c.JSON(status, gin.H{
 		"status":  status,
 		"message": message,
@@ -77,7 +71,7 @@ func SendError(status int, err error, c *gin.Context) {
 	c.AbortWithStatusJSON(status, err)
 }
 
-func GetBody[T comparable](c *gin.Context) (T, error) {
+func GetBody[T any](c *gin.Context) (T, error) {
 	var data T
 
 	reqBody, exists := c.Get("body")
@@ -88,6 +82,7 @@ func GetBody[T comparable](c *gin.Context) (T, error) {
 			return data, err
 		}
 		err = json.Unmarshal(rawData, &data)
+		c.Set("body", data)
 		return data, nil
 	}
 

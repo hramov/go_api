@@ -13,3 +13,4 @@
   - Cors middleware
   - Module structure
   - Built-in features like guards, filters etc.
+  - Validation
