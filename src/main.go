@@ -2,9 +2,9 @@ package main
 
 import (
 	"api/src/api/v1"
-	ioc "api/src/core/container"
 	"api/src/core/logger"
 	"api/src/database"
+	"api/src/modules"
 
 	"github.com/joho/godotenv"
 )
@@ -17,9 +17,9 @@ func main() {
 	}
 
 	database.InitPostgres(true)
-
-	ioc.Init()
 	logger.Info("IoC started")
+
+	modules.InitModules()
 
 	api := api.Server{}
 	go api.Start()

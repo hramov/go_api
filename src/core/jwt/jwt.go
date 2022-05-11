@@ -7,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/dgrijalva/jwt-go"
-	"golang.org/x/crypto/bcrypt"
 )
 
 type Claims struct {
@@ -18,9 +17,11 @@ type Claims struct {
 
 func CreateToken(user *user_entity.User) (string, error) {
 	atClaims := Claims{}
+
 	atClaims.Id = strconv.FormatUint(uint64(user.ID), 10)
 	atClaims.Email = user.Email
 	atClaims.Role = user.Role
+
 	at := jwt.NewWithClaims(jwt.SigningMethodHS256, atClaims)
 	token, err := at.SignedString([]byte(os.Getenv("JWT_SECRET")))
 	if err != nil {
@@ -50,12 +51,4 @@ func TokenValid(tokenString string) (jwt.MapClaims, error) {
 	}
 
 	return token.Claims.(jwt.MapClaims), nil
-}
-
-func GetPasswordHash(password string) (string, error) {
-	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
-	if err != nil {
-		return "", err
-	}
-	return string(hash), nil
 }

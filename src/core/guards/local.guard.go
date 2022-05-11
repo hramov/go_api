@@ -1,8 +1,8 @@
 package guards
 
 import (
+	ioc "api/src/core/container"
 	"api/src/core/jwt"
-	"api/src/core/logger"
 	auth_dto "api/src/modules/auth/dto"
 	"api/src/modules/user"
 	"api/src/utils"
@@ -10,7 +10,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golobby/container/v3"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -18,10 +17,7 @@ func LocalGuard(c *gin.Context) {
 
 	body := utils.GetBody[auth_dto.LoginDto](c)
 
-	var userService *user.UserService
-	if err := container.NamedResolve(&userService, "UserService"); err != nil {
-		logger.Error("Cannot resolve User service")
-	}
+	userService := ioc.Pick[*user.UserService]("UserService")
 
 	user := userService.FindByEmail(body.Email)
 	if user == nil {

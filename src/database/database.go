@@ -1,12 +1,12 @@
 package database
 
 import (
+	ioc "api/src/core/container"
 	"api/src/core/logger"
 	user_entity "api/src/modules/user/entity"
 	"fmt"
 	"os"
 
-	"github.com/golobby/container/v3"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
@@ -27,12 +27,7 @@ func InitPostgres(migrate bool) {
 		migrateModels(db)
 	}
 
-	err = container.NamedSingleton("postgres", func() *gorm.DB {
-		return db
-	})
-	if err != nil {
-		logger.Error("Cannot use IoC")
-	}
+	ioc.Put("postgres", db)
 }
 
 func migrateModels(db *gorm.DB) {

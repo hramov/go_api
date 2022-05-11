@@ -1,6 +1,7 @@
 package auth
 
 import (
+	ioc "api/src/core/container"
 	user_entity "api/src/modules/user/entity"
 	"api/src/utils"
 	"net/http"
@@ -11,8 +12,12 @@ import (
 type AuthController struct{}
 
 func (ac *AuthController) Ping(c *gin.Context) {
+
+	authService := ioc.Pick[*AuthService]("AuthService")
+
+	result := authService.Ping()
 	c.JSON(http.StatusOK, &gin.H{
-		"message": "Pong",
+		"message": result,
 	})
 }
 

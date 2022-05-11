@@ -8,6 +8,7 @@ import (
 	"strings"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/bcrypt"
 )
 
 func GetReqResFromContext(c *gin.Context) (*http.Request, *http.Response) {
@@ -72,4 +73,22 @@ func GetBody[T comparable](c *gin.Context) T {
 		return data
 	}
 	return data
+}
+
+func CheckErrorForHttp(err error, status int, c *gin.Context) {
+	if err != nil {
+		// c.AbortWithStatusJSON(status, gin.H{
+		// 	"error": err.Error(),
+		// })
+		c.AbortWithError(status, err)
+		return
+	}
+}
+
+func GetPasswordHash(password string) (string, error) {
+	hash, err := bcrypt.GenerateFromPassword([]byte(password), 10)
+	if err != nil {
+		return "", err
+	}
+	return string(hash), nil
 }

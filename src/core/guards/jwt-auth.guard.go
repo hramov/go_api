@@ -1,23 +1,20 @@
 package guards
 
 import (
+	ioc "api/src/core/container"
 	"api/src/core/jwt"
-	"api/src/core/logger"
 	"api/src/modules/user"
 	"api/src/utils"
 	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/golobby/container/v3"
 )
 
 func JwtAuthGuard(roles []string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var userService *user.UserService
-		if err := container.NamedResolve(&userService, "UserService"); err != nil {
-			logger.Error("Cannot resolve UserService")
-		}
+
+		userService := ioc.Pick[*user.UserService]("UserService")
 
 		token, err := utils.GetTokenFromContext(c)
 

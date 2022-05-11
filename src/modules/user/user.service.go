@@ -3,6 +3,7 @@ package user
 import (
 	user_entity "api/src/modules/user/entity"
 	user_port "api/src/modules/user/port"
+	"fmt"
 )
 
 type UserService struct {
@@ -10,6 +11,7 @@ type UserService struct {
 }
 
 func (us *UserService) Find() []*user_entity.User {
+	fmt.Println(us.Repo)
 	return us.Repo.Find()
 }
 
