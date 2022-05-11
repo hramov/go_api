@@ -21,7 +21,7 @@ func main() {
 	logger.Info("Successfilly connected to database")
 
 	api := api.Server{}
-	api.Init()
+	api.Init("/api/v1")
 
 	utils.InitModules([]utils.Initable{
 		&auth.AuthModule{},

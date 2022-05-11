@@ -11,14 +11,14 @@ type Server struct {
 	router *gin.Engine
 }
 
-func (a *Server) Init() {
+func (a *Server) Init(prefix string) {
 	a.router = gin.New()
 	gin.SetMode(gin.ReleaseMode)
 
 	a.router.Use(gin.Recovery())
 	a.router.Use(gin.Logger())
 
-	api := a.router.Group("/api/v1")
+	api := a.router.Group(prefix)
 	ioc.Put("Router", api)
 }
 
