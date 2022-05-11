@@ -4,6 +4,7 @@ import (
 	ioc "api/src/core/container"
 	"os"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
@@ -11,17 +12,21 @@ type Server struct {
 	router *gin.Engine
 }
 
-func (a *Server) Init(prefix string) {
-	a.router = gin.New()
+func (s *Server) Init(prefix string) {
+	s.router = gin.New()
 	gin.SetMode(gin.ReleaseMode)
 
-	a.router.Use(gin.Recovery())
-	a.router.Use(gin.Logger())
+	s.router.Use(gin.Recovery())
+	s.router.Use(gin.Logger())
 
-	api := a.router.Group(prefix)
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"*"}
+	s.router.Use(cors.New(config))
+
+	api := s.router.Group(prefix)
 	ioc.Put("Router", api)
 }
 
-func (a *Server) Start() {
-	a.router.Run(":" + os.Getenv("APP_PORT"))
+func (s *Server) Start() {
+	s.router.Run(":" + os.Getenv("APP_PORT"))
 }
