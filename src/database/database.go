@@ -21,8 +21,6 @@ func InitPostgres(migrate bool) {
 		logger.Error("Cannot connect to database with DSN: " + PostgresDSN)
 	}
 
-	logger.Info("Successfilly connected to database")
-
 	if migrate {
 		migrateModels(db)
 	}

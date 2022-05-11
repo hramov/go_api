@@ -4,29 +4,31 @@ import (
 	"api/src/api/v1"
 	"api/src/core/logger"
 	"api/src/database"
-	"api/src/modules"
+	"api/src/modules/auth"
+	"api/src/modules/user"
+	"api/src/utils"
 
 	"github.com/joho/godotenv"
 )
 
 func main() {
 
-	err := godotenv.Load(".env")
-	if err != nil {
+	if err := godotenv.Load(".env"); err != nil {
 		logger.Error("Error loading .env file")
-	}
+	} // Load .env file with configs
 
-	database.InitPostgres(true)
-	logger.Info("IoC started")
-
-	modules.InitModules()
+	database.InitPostgres(true) // Establish connect to database and migrate models if needed
+	logger.Info("Successfilly connected to database")
 
 	api := api.Server{}
-	go api.Start()
+	api.Init()
+
+	utils.InitModules([]utils.Initable{
+		&auth.AuthModule{},
+		&user.UserModule{},
+	}) // Init registered modules, provide their services in IoC container
 
 	logger.Info("Server gorutine started")
 
-	for {
-
-	}
+	api.Start()
 }

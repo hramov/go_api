@@ -1,7 +1,11 @@
 package auth
 
+import ioc "api/src/core/container"
+
 type AuthService struct{}
 
-func (as *AuthService) Ping() string {
-	return "Pong"
+func createService() *AuthService {
+	service := &AuthService{}
+	ioc.Put("AuthService", service)
+	return service
 }

@@ -1,24 +1,27 @@
 package api
 
 import (
-	"api/src/core/logger"
-	"api/src/modules/auth"
-	"api/src/modules/user"
+	ioc "api/src/core/container"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
 
-type Server struct{}
+type Server struct {
+	router *gin.Engine
+}
+
+func (a *Server) Init() {
+	a.router = gin.New()
+	gin.SetMode(gin.ReleaseMode)
+
+	a.router.Use(gin.Recovery())
+	a.router.Use(gin.Logger())
+
+	api := a.router.Group("/api/v1")
+	ioc.Put("Router", api)
+}
 
 func (a *Server) Start() {
-	router := gin.Default()
-	gin.SetMode(gin.ReleaseMode)
-	router.Use(gin.Recovery())
-	api := router.Group("/api/v1")
-
-	auth.Init(api)
-	user.Init(api)
-
-	logger.Info("Initialized all router groups")
-	router.Run(":3000")
+	a.router.Run(":" + os.Getenv("APP_PORT"))
 }

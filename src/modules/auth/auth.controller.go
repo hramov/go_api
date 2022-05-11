@@ -9,16 +9,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-type AuthController struct{}
+type AuthController struct {
+	Service *AuthService
+}
 
-func (ac *AuthController) Ping(c *gin.Context) {
-
-	authService := ioc.Pick[*AuthService]("AuthService")
-
-	result := authService.Ping()
-	c.JSON(http.StatusOK, &gin.H{
-		"message": result,
-	})
+func createController() *AuthController {
+	return &AuthController{
+		Service: ioc.Pick[*AuthService]("AuthService"),
+	}
 }
 
 func (ac *AuthController) Login(c *gin.Context) {

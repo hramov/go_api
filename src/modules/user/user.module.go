@@ -1,11 +1,7 @@
 package user
 
 import (
-	ioc "api/src/core/container"
 	"api/src/core/logger"
-	user_entity "api/src/modules/user/entity"
-
-	"gorm.io/gorm"
 )
 
 type UserModule struct {
@@ -15,6 +11,13 @@ type UserModule struct {
 
 var userModule *UserModule
 
+func (um *UserModule) Init() {
+	um.Service = createService()
+	um.Controller = createController()
+	userModule = um
+	InitRouter()
+}
+
 func GetUserModule() *UserModule {
 	if userModule == nil {
 		logger.Error("UserModule not initialized")
@@ -22,16 +25,10 @@ func GetUserModule() *UserModule {
 	return userModule
 }
 
-func (um *UserModule) Init() {
+func getController() *UserController {
+	return userModule.Controller
+}
 
-	db := ioc.Pick[*gorm.DB]("postgres")
-	um.Controller = &UserController{}
-	um.Service = &UserService{
-		&user_entity.UserRepository{
-			Db: db,
-		},
-	}
-	userModule = um
-
-	ioc.Put("UserService", um.Service)
+func getService() *UserService {
+	return userModule.Service
 }

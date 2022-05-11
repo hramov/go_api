@@ -92,3 +92,23 @@ func GetPasswordHash(password string) (string, error) {
 	}
 	return string(hash), nil
 }
+
+/**
+This function inits all modules.
+Modules provide their services in IoC container.
+Modules can be resolved by inner function Get<ModuleName>Module()
+Modules services can be resolved via ioc.Pick[T](name string) T
+*/
+
+type Initable interface {
+	Init()
+}
+
+func InitModules(modules []Initable) {
+
+	for i := 0; i < len(modules); i++ {
+		temp := modules[i]
+		temp.Init()
+	}
+
+}

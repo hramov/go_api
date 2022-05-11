@@ -1,7 +1,6 @@
 package auth
 
 import (
-	ioc "api/src/core/container"
 	"api/src/core/logger"
 )
 
@@ -20,9 +19,16 @@ func GetAuthModule() *AuthModule {
 }
 
 func (am *AuthModule) Init() {
-	am.Controller = &AuthController{}
-	am.Service = &AuthService{}
+	am.Service = createService()
+	am.Controller = createController()
 	authModule = am
+	InitRouter()
+}
 
-	ioc.Put("AuthService", am.Service)
+func getController() *AuthController {
+	return authModule.Controller
+}
+
+func getService() *AuthService {
+	return authModule.Service
 }
