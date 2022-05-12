@@ -90,6 +90,14 @@ func GetBody[T any](c *gin.Context) (T, error) {
 	return data, nil
 }
 
+func GetParam(name string, c *gin.Context) string {
+	return c.Param(name)
+}
+
+func GetQuery(name string, c *gin.Context) string {
+	return c.Query(name)
+}
+
 func CheckErrorForHttp(err error, status int, c *gin.Context) bool {
 	if err != nil {
 		c.AbortWithStatusJSON(status, gin.H{

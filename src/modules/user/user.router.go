@@ -13,5 +13,6 @@ func InitRouter(controller *UserController) {
 	user := router.Group("/user")
 	{
 		user.GET("/", guards.JwtAuthGuard([]string{"admin"}), controller.Find)
+		user.GET("/:id", guards.JwtAuthGuard([]string{"admin"}), controller.FindByID)
 	}
 }

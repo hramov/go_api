@@ -26,3 +26,9 @@ func (uc *UserController) Find(c *gin.Context) {
 	result := uc.Service.Find()
 	utils.SendResponse(200, "", result, c)
 }
+
+func (uc *UserController) FindByID(c *gin.Context) {
+	id := utils.GetParam("id", c)
+	result := uc.Service.FindBy("id", id)
+	utils.SendResponse(200, "", result, c)
+}
