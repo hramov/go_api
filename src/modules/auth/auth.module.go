@@ -5,7 +5,7 @@ import (
 )
 
 type AuthModule struct {
-	Controller *AuthController
+	controller *AuthController
 	Service    *AuthService
 }
 
@@ -20,15 +20,7 @@ func GetAuthModule() *AuthModule {
 
 func (am *AuthModule) Init() {
 	am.Service = createService()
-	am.Controller = createController()
+	am.controller = createController()
 	authModule = am
-	InitRouter()
-}
-
-func getController() *AuthController {
-	return authModule.Controller
-}
-
-func getService() *AuthService {
-	return authModule.Service
+	InitRouter(am.controller)
 }

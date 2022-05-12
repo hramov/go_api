@@ -54,6 +54,5 @@ func LocalGuard(c *gin.Context) {
 	}
 
 	c.Set("access_token", token)
-	c.Set("body", body)
 	c.Next()
 }

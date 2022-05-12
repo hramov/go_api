@@ -5,7 +5,7 @@ import (
 )
 
 type UserModule struct {
-	Controller *UserController
+	controller *UserController
 	Service    *UserService
 }
 
@@ -13,9 +13,9 @@ var userModule *UserModule
 
 func (um *UserModule) Init() {
 	um.Service = createService()
-	um.Controller = createController()
+	um.controller = createController()
 	userModule = um
-	InitRouter()
+	InitRouter(um.controller)
 }
 
 func GetUserModule() *UserModule {
@@ -23,12 +23,4 @@ func GetUserModule() *UserModule {
 		logger.Error("UserModule not initialized")
 	}
 	return userModule
-}
-
-func getController() *UserController {
-	return userModule.Controller
-}
-
-func getService() *UserService {
-	return userModule.Service
 }

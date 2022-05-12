@@ -90,14 +90,14 @@ func GetBody[T any](c *gin.Context) (T, error) {
 	return data, nil
 }
 
-func CheckErrorForHttp(err error, status int, c *gin.Context) {
+func CheckErrorForHttp(err error, status int, c *gin.Context) bool {
 	if err != nil {
-		// c.AbortWithStatusJSON(status, gin.H{
-		// 	"error": err.Error(),
-		// })
-		c.AbortWithError(status, err)
-		return
+		c.AbortWithStatusJSON(status, gin.H{
+			"error": err.Error(),
+		})
+		return true
 	}
+	return false
 }
 
 func GetPasswordHash(password string) (string, error) {

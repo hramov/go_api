@@ -23,7 +23,6 @@ func ValidationPipe[T comparable]() gin.HandlerFunc {
 		ok, errs := validation.DefaultValidator(body)
 
 		if ok {
-			c.Set("body", body)
 			c.Next()
 			return
 		}

@@ -7,9 +7,8 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter() {
+func InitRouter(controller *UserController) {
 	router := ioc.Pick[*gin.RouterGroup]("Router")
-	controller := getController()
 
 	user := router.Group("/user")
 	{
