@@ -22,9 +22,7 @@ start:
 
 git:
 	git add .
-	echo 'Input the commit message'
-	read message
-	git commit -m "$message"
+	git commit -m "Commit from Makefile"
 	git push origin main
 
 all:
