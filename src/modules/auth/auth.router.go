@@ -9,7 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter(controller *AuthController) {
+func initRouter(controller *AuthController) {
 	router := ioc.Pick[*gin.RouterGroup]("Router")
 
 	auth := router.Group("/auth")

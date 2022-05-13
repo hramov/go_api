@@ -15,7 +15,8 @@ func (um *UserModule) Init() {
 	um.Service = createService()
 	um.controller = createController()
 	userModule = um
-	InitRouter(um.controller)
+	initRouter(um.controller)
+	logger.Info("User module successfilly initialized")
 }
 
 func GetUserModule() *UserModule {

@@ -14,3 +14,7 @@
   - Module structure
   - Built-in features like guards, filters etc.
   - Validation
+  - gRPC server
+
+### In plans:
+  - ALTS Authorization for gRPC

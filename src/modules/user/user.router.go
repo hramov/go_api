@@ -7,12 +7,17 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func InitRouter(controller *UserController) {
+func initRouter(controller *UserController) {
 	router := ioc.Pick[*gin.RouterGroup]("Router")
 
 	user := router.Group("/user")
 	{
-		user.GET("/", guards.JwtAuthGuard([]string{"admin"}), controller.Find)
-		user.GET("/:id", guards.JwtAuthGuard([]string{"admin"}), controller.FindByID)
+		user.GET("/",
+			guards.JwtAuthGuard([]string{"admin"}),
+			controller.Find)
+
+		user.GET("/:id",
+			guards.JwtAuthGuard([]string{"admin"}),
+			controller.FindByID)
 	}
 }

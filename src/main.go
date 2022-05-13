@@ -15,6 +15,7 @@ import (
 	"api/src/modules/auth"
 	"api/src/modules/user"
 	"api/src/utils"
+	"os"
 
 	"github.com/joho/godotenv"
 )
@@ -28,7 +29,6 @@ func main() {
 	database.InitPostgres(true) // Establish connect to database and migrate models if needed
 	logger.Info("Successfilly connected to database")
 
-	api := api.Server{}
 	api.Init("/api/v1")
 
 	utils.InitModules([]utils.Initable{
@@ -36,7 +36,9 @@ func main() {
 		&user.UserModule{},
 	}) // Init registered modules, provide their services in IoC container
 
-	logger.Info("Server gorutine started")
-
 	api.Start()
+
+	logger.Info("Application successfully started at port:\n\t\t\t\t - " + os.Getenv("APP_PORT") + " (REST)\n\t\t\t\t - " + os.Getenv("GRPC_PORT") + " (GRPC)")
+	for {
+	}
 }
