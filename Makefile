@@ -20,11 +20,6 @@ start:
 	echo "Starting server"
 	go run ./src/main.go
 
-git:
-	git add .
-	git commit -m "Commit from Makefile"
-	git push origin main
-
 all:
 	go mod tidy && protoc --go_out=. --go_opt=paths=source_relative \
     --go-grpc_out=. --go-grpc_opt=paths=source_relative \
